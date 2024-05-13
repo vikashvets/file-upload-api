@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-router.post('/upload-file', function(req, res, next) {
-    console.log(req.body);
+router.post('/upload-file',  function(req, res, next) {
     res.send('respond with a resource');
 });
 
