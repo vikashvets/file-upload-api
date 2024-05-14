@@ -1,4 +1,5 @@
 import express from 'express';
+import {Client} from "pg";
 
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -9,7 +10,19 @@ const bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var fileUploadRouter = require('./routes/uploadFile');
 
+require('dotenv').config()
+
 var app = express();
+
+export const client = new Client({
+  user: process.env.POSTGRES_DB_USERNAME,
+  host: process.env.POSTGRES_DB_HOST,
+  database: process.env.POSTGRES_DB_NAME,
+  password: process.env.POSTGRES_DB_PASSWORD,
+  port: Number(process.env.POSTGRES_DB_PORT)
+});
+
+client.connect();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
