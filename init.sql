@@ -6,5 +6,6 @@ create database file_upload;
            file_type varchar(255),
            file_data bytea,
            compressed_file_data bytea,
+           compress_ratio int,
            compressed_file_size int
        );
