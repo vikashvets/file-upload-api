@@ -1,5 +1,7 @@
+require('dotenv').config()
 import express from 'express';
 import {Client} from "pg";
+import {configureWs} from "./wsServer";
 
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -23,6 +25,7 @@ export const client = new Client({
 });
 
 client.connect();
+configureWs();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
