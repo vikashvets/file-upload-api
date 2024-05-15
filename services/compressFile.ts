@@ -10,7 +10,7 @@ export const compressFile = async (fileData: string, fileName: string, fileType:
                 compressionLevel: compressRatio,
             });
         const compressedImageBuffer = await compressedImage.toBuffer();
-        await updateUploadedFileWithCompressedData(compressedImageBuffer.toString('base64'), compressedImageBuffer.byteLength, id);
+        await updateUploadedFileWithCompressedData(compressedImageBuffer, compressedImageBuffer.byteLength, id);
         compressedImage.toFile(`./images/compressed-${fileName}`) // Temporary save compressed image to disk for testing purposes
             .then(() => {
                 console.log(`Compressed ${fileName} successfully`);

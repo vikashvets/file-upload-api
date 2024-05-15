@@ -19,7 +19,12 @@ router.post('/upload-file',  async function (req: Request, res: Response, next: 
 router.get('/files',  async function (req: Request, res: Response, next: NextFunction) {
     try {
         const result = await getFileList();
-        res.status(200).json(result.rows);
+        res.status(200).json(
+            result.rows.map(row => ({
+                ...row,
+                compressedFileData: `data:${row.fileType};base64,${row.compressedFileData.toString('base64')}`
+            })
+        ));
     } catch (err) {
         console.error(err);
         res.status(500).json({error: 'An error occurred'});
