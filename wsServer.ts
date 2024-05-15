@@ -1,13 +1,11 @@
 import WebSocket from 'ws';
-
+export let wsInstance: WebSocket;
 export const configureWs = () => {
     const wss = new WebSocket.Server({ port: Number(process.env.WS_PORT)});
 
     wss.on("connection", (ws: WebSocket) => {
-        console.log(ws, wss);
         console.log("New client connected");
-
-        ws.send('Welcome, you are connected!');
+        wsInstance = ws;
 
         ws.on("message", (data: string) => {
             console.log(`Client has sent: ${data}`)
