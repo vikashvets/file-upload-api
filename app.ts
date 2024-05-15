@@ -10,7 +10,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
-var fileUploadRouter = require('./routes/uploadFile');
+var filesRouter = require('./routes/files');
 
 require('dotenv').config()
 
@@ -42,6 +42,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/api', fileUploadRouter);
+app.use('/api', filesRouter);
+
 
 module.exports = app;
