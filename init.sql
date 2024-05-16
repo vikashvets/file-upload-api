@@ -1,5 +1,4 @@
-create database file_upload;
-       create table if not exists uploaded_files (
+create table if not exists uploaded_files (
            id serial primary key,
            "fileName" varchar(255),
            "fileSize" int,
@@ -8,4 +7,4 @@ create database file_upload;
            "compressedFileData" bytea,
            "compressRatio" int,
            "compressedFileSize" int
-       );
+);

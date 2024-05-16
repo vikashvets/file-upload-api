@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 export let wsInstance: WebSocket;
 export const configureWs = () => {
-    const wss = new WebSocket.Server({ port: Number(process.env.WS_PORT)});
+    const wss = new WebSocket.Server({ port: Number(process.env.WS_PORT), host: process.env.WS_HOST});
 
     wss.on("connection", (ws: WebSocket) => {
         console.log("New client connected");
