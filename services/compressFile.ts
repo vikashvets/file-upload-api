@@ -13,7 +13,7 @@ export const compressFile = async (fileData: string, fileName: string, fileType:
         const compressedImageBuffer = await compressedImage.toBuffer();
         await updateUploadedFileWithCompressedData(compressedImageBuffer, compressedImageBuffer.byteLength, id);
 
-        wsInstance.send(`File ${fileName} compressed successfully with ratio ${compressRatio}, result size: ${compressedImageBuffer.byteLength} bytes`);
+        wsInstance.send(`File "${fileName}" compressed successfully with ratio ${compressRatio}, result size: ${compressedImageBuffer.byteLength} bytes`);
 
         compressedImage.toFile(`./images/compressed-${fileName}`) // Temporary save compressed image to disk for testing purposes
             .then(() => {
