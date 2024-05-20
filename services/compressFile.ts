@@ -1,9 +1,10 @@
 import sharp from "sharp";
 import {updateUploadedFileWithCompressedData} from "../db/queries";
 import {splitBase64Header, splitDataTypeHeader} from "../utils/dataSplitter";
-import {wsInstance} from "../wsServer";
+import {wsClients} from "../wsServer";
 
-export const compressFile = async (fileData: string, fileName: string, fileType:string, compressRatio: number, id: number) => {
+
+export const compressFile = async (fileData: string, fileName: string, fileType:string, compressRatio: number, id: number, wsClientId: string) => {
     try {
         // @ts-ignore
         const compressedImage = sharp(Buffer.from(splitBase64Header(fileData), 'base64'))[splitDataTypeHeader(fileType)]
@@ -13,7 +14,8 @@ export const compressFile = async (fileData: string, fileName: string, fileType:
         const compressedImageBuffer = await compressedImage.toBuffer();
         await updateUploadedFileWithCompressedData(compressedImageBuffer, compressedImageBuffer.byteLength, id);
 
-        wsInstance.send(`File "${fileName}" compressed successfully with ratio ${compressRatio}, result size: ${compressedImageBuffer.byteLength} bytes`);
+        wsClients.get(wsClientId).send(`File "${fileName}" compressed successfully with ratio ${compressRatio}, result size: ${compressedImageBuffer.byteLength} bytes`);
+        console.log(`Notification was sent to the client ${wsClientId}`);
 
         compressedImage.toFile(`./images/compressed-${fileName}`) // Temporary save compressed image to disk for testing purposes
             .then(() => {

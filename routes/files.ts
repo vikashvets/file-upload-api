@@ -9,7 +9,7 @@ router.post('/upload-file',  async function (req: Request, res: Response, next: 
         const {fileName, fileData, fileSize, fileType, compressRatio} = req.body;
         const result = await saveUploadedFileToDb(fileName, fileData, fileSize, fileType, compressRatio, null, null);
         res.status(200).json("File uploaded successfully");
-        compressFile(fileData, fileName, fileType, compressRatio, result.rows[0].id);
+        compressFile(fileData, fileName, fileType, compressRatio, result.rows[0].id, req.headers['client-id'] as string);
     } catch (err) {
         console.error(err);
         res.status(500).json({error: 'An error occurred'});

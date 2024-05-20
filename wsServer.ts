@@ -1,18 +1,21 @@
 import WebSocket from 'ws';
-export let wsInstance: WebSocket;
-export const configureWs = () => {
-    const wss = new WebSocket.Server({ port: Number(process.env.WS_PORT), host: process.env.WS_HOST});
+export const wsClients = new Map();
 
-    wss.on("connection", (ws: WebSocket) => {
-        console.log("New client connected");
-        wsInstance = ws;
+export const configureWs = () => {
+    const wss = new WebSocket.Server({ port: Number(process.env.WS_PORT), host: process.env.WS_HOST, });
+
+    wss.on("connection", (ws: WebSocket, req) => {
+        const connectionId = req.url?.slice(2);
+        console.log(`New client ${connectionId} connected`);
+        wsClients.set(connectionId, ws);
 
         ws.on("message", (data: string) => {
-            console.log(`Client has sent: ${data}`)
+            console.log(`Client ${connectionId} has sent: ${data}`)
         });
 
         ws.on("close", () => {
-            console.log("The client has disconnected");
+            console.log(`The client ${connectionId} has disconnected`);
+            wsClients.delete(connectionId);
         });
 
         ws.onerror = function () {
