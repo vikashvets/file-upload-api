@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import {compressFile} from "../services/compressFile";
-import {getFileList, saveUploadedFileToDb} from "../db/queries";
+import {getFileList, getFilesCount, saveUploadedFileToDb} from "../db/queries";
 
 const router = express.Router();
 
@@ -18,13 +18,20 @@ router.post('/upload-file',  async function (req: Request, res: Response, next: 
 
 router.get('/files',  async function (req: Request, res: Response, next: NextFunction) {
     try {
-        const result = await getFileList();
-        res.status(200).json(
-            result.rows.map(row => ({
-                ...row,
-                compressedFileData: `data:${row.fileType};base64,${row.compressedFileData.toString('base64')}`
-            })
-        ));
+        const { page, perPage } = req.query;
+
+        const filesResult = await getFileList(Number(perPage), Number(perPage) * (Number(page) - 1));
+        const filesCount = await getFilesCount();
+
+        const files = filesResult.rows.map(row => ({
+            ...row,
+            compressedFileData: `data:${row.fileType};base64,${row.compressedFileData.toString('base64')}`
+        }));
+        res.status(200).json({files, pagination: {
+                page: Number(req.query.page),
+                perPage: Number(req.query.perPage),
+                totalItems: Number(filesCount.rows[0].count)
+        }});
     } catch (err) {
         console.error(err);
         res.status(500).json({error: 'An error occurred'});

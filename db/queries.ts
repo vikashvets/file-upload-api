@@ -29,8 +29,17 @@ export const getFileList = async (...args: (string | number)[]) => {
         const values = [...args];
         const query = 'SELECT ' +
             '"fileName", "fileType", "fileSize", "compressedFileData", "compressedFileSize", "compressRatio", "id"' +
-            ' FROM uploaded_files';
+            ' FROM uploaded_files LIMIT $1 OFFSET $2';
         return await client.query(query, values);
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getFilesCount = async () => {
+    try {
+        const query = 'SELECT COUNT(*) FROM uploaded_files';
+        return await client.query(query);
     } catch (err) {
         throw err;
     }
