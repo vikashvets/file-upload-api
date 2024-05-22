@@ -25,7 +25,9 @@ router.get('/files',  async function (req: Request, res: Response, next: NextFun
 
         const files = filesResult.rows.map(row => ({
             ...row,
-            compressedFileData: `data:${row.fileType};base64,${row.compressedFileData.toString('base64')}`
+            compressedFileData: `data:${row.fileType};base64,${row.compressedFileData.toString('base64')}`,
+            compressedFileSize: `${row.compressedFileSize} bytes`,
+            fileSize: `${row.fileSize} bytes`,
         }));
         res.status(200).json({files, pagination: {
                 page: Number(req.query.page),
