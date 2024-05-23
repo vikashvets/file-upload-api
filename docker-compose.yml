@@ -11,6 +11,7 @@ services:
       volumes:
         - ./postgresql:/var/lib/postgresql
         - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+        - /etc/letsencrypt/:/etc/letsencrypt/
   api:
     container_name: file-upload-api
     build:
