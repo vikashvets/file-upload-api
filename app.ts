@@ -12,8 +12,6 @@ const bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var filesRouter = require('./routes/files');
 
-require('dotenv').config()
-
 var app = express();
 
 export const client = new Client({
@@ -32,7 +30,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: process.env.ALLOWED_ORIGIN
 }));
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: '50mb', type: 'application/json'}));
