@@ -29,7 +29,7 @@ router.get('/files',  async function (req: Request, res: Response, next: NextFun
             compressedFileSize: `${row.compressedFileSize} bytes`,
             fileSize: `${row.fileSize} bytes`,
         }));
-        res.status(200).json({files, pagination: {
+        res.status(200).json({list: files, pagination: {
                 page: Number(req.query.page),
                 perPage: Number(req.query.perPage),
                 totalItems: Number(filesCount.rows[0].count)
