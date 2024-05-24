@@ -1,33 +1,28 @@
 #!/usr/bin/env node
-
 import * as fs from "node:fs";
-
-/**
- * Module dependencies.
- */
-
-var app = require('../app');
-var debug = require('debug')('file-upload-api:server');
-var http = require('http');
-var https = require('https');
+import {Server} from "https";
+const app = require('../app');
+const debug = require('debug')('file-upload-api:server');
+const http = require('http');
+const https = require('https');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.API_PORT || '3001');
-var httpsPort = normalizePort(process.env.HTTPS_PORT || '443');
+const port = normalizePort(process.env.API_PORT || '3001');
+const httpsPort = normalizePort(process.env.HTTPS_PORT || '443');
 
-
+let server: Server;
 if (process.env.NODE_ENV === 'production') {
   app.set('port', httpsPort);
-  var httpsServer = https.createServer({
+  server = https.createServer({
       key: fs.readFileSync('/etc/letsencrypt/live/my_api_url/privkey.pem'),
       cert: fs.readFileSync('/etc/letsencrypt/live/my_api_url/fullchain.pem'),
 }, app);
-  httpsServer.listen(httpsPort);
+  server.listen(httpsPort);
 } else {
-  var server = http.createServer(app);
+  server = http.createServer(app);
   app.set('port', port);
   server.listen(port);
   server.on('error', onError);
@@ -39,7 +34,7 @@ if (process.env.NODE_ENV === 'production') {
  */
 
 function normalizePort(val: string) {
-  var port = parseInt(val, 10);
+  const port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -63,7 +58,7 @@ function onError(error: { syscall: string; code: any; }) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  const bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -87,9 +82,9 @@ function onError(error: { syscall: string; code: any; }) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  const addr = server.address();
+  const bind = typeof addr === 'string'
     ? 'pipe ' + addr
-    : 'port ' + addr.port;
+    : 'port ' + addr?.port;
   debug('Listening on ' + bind);
 }

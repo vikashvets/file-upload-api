@@ -3,16 +3,16 @@ import express from 'express';
 import {Client} from "pg";
 import {configureWs} from "./wsServer";
 
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-var indexRouter = require('./routes/index');
-var filesRouter = require('./routes/files');
+const indexRouter = require('./routes/index');
+const filesRouter = require('./routes/files');
 
-var app = express();
+const app = express();
 
 export const client = new Client({
   user: process.env.POSTGRES_DB_USERNAME,
