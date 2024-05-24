@@ -6,11 +6,11 @@ import {wsClients} from "../wsServer";
 
 export const compressFile = async (fileData: string, fileName: string, fileType:string, compressRatio: number, id: number, wsClientId: string) => {
     try {
-        // @ts-ignore
-        const compressedImage = sharp(Buffer.from(splitBase64Header(fileData), 'base64'))[splitDataTypeHeader(fileType)]
-            ({
-                compressionLevel: compressRatio,
-            });
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const compressedImage = sharp(Buffer.from(splitBase64Header(fileData), 'base64'))[splitDataTypeHeader(fileType)]({
+            compressionLevel: compressRatio
+        });
         const compressedImageBuffer = await compressedImage.toBuffer();
         await updateUploadedFileWithCompressedData(compressedImageBuffer, compressedImageBuffer.byteLength, id);
 

@@ -5,6 +5,7 @@ import {Server} from "http";
 import app from '../app';
 import * as http from "node:http";
 import * as https from "node:https";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const debug = require('debug')('file-upload-api:server');
 
 /**
@@ -54,7 +55,7 @@ function normalizePort(val: string) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error: { syscall: string; code: any; }) {
+function onError(error: { syscall: string; code: string; }) {
   if (error.syscall !== 'listen') {
     throw error;
   }
