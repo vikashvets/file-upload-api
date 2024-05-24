@@ -1,10 +1,10 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import {compressFile} from "../services/compressFile";
 import {getFileList, getFilesCount, saveUploadedFileToDb} from "../db/queries";
 
 const router = express.Router();
 
-router.post('/upload-file',  async function (req: Request, res: Response, next: NextFunction) {
+router.post('/upload-file',  async function (req: Request, res: Response) {
     try {
         const {fileName, fileData, fileSize, fileType, compressRatio} = req.body;
         const result = await saveUploadedFileToDb(fileName, fileData, fileSize, fileType, compressRatio, null, null);
@@ -16,7 +16,7 @@ router.post('/upload-file',  async function (req: Request, res: Response, next: 
     }
 });
 
-router.get('/files',  async function (req: Request, res: Response, next: NextFunction) {
+router.get('/files',  async function (req: Request, res: Response) {
     try {
         const { page, perPage } = req.query;
 
@@ -40,4 +40,4 @@ router.get('/files',  async function (req: Request, res: Response, next: NextFun
     }
 });
 
-module.exports = router;
+export default router;

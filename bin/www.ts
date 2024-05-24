@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import * as fs from "node:fs";
-import {Server} from "https";
-const app = require('../app');
+import {Server as HttpsServer} from "https";
+import {Server} from "http";
+import app from '../app';
+import * as http from "node:http";
+import * as https from "node:https";
 const debug = require('debug')('file-upload-api:server');
-const http = require('http');
-const https = require('https');
 
 /**
  * Get port from environment and store in Express.
@@ -13,7 +14,7 @@ const https = require('https');
 const port = normalizePort(process.env.API_PORT || '3001');
 const httpsPort = normalizePort(process.env.HTTPS_PORT || '443');
 
-let server: Server;
+let server: Server | HttpsServer;
 if (process.env.NODE_ENV === 'production') {
   app.set('port', httpsPort);
   server = https.createServer({

@@ -1,17 +1,16 @@
-require('dotenv').config()
+import dotenv from 'dotenv';
 import express from 'express';
 import {Client} from "pg";
 import {configureWs} from "./wsServer";
 
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+import path from 'path';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
-const indexRouter = require('./routes/index');
-const filesRouter = require('./routes/files');
+import indexRouter from './routes/index';
+import filesRouter from './routes/files';
 
+dotenv.config()
 const app = express();
 
 export const client = new Client({
@@ -32,15 +31,12 @@ app.set('view engine', 'jade');
 app.use(cors({
   origin: process.env.ALLOWED_ORIGIN
 }));
-app.use(logger('dev'));
 app.use(bodyParser.json({limit: '50mb', type: 'application/json'}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api', filesRouter);
 
-
-module.exports = app;
+export default app;
